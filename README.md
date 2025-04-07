@@ -29,7 +29,7 @@ A RESTful API for managing locations in a tree structure, built with NestJS, Typ
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone git@github.com:nv10jr/crud-locations.git
 cd crud-locations
 ```
 
@@ -46,8 +46,8 @@ cp .env.example .env
 
 4. Update the `.env` file with your PostgreSQL configuration:
 ```env
-POSTGRES_USER=your_username
-POSTGRES_PASSWORD=your_password
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
 POSTGRES_DB=locations_db
 ```
 
@@ -60,7 +60,7 @@ CREATE DATABASE locations_db;
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone git@github.com:nv10jr/crud-locations.git
 cd crud-locations
 ```
 
@@ -72,8 +72,8 @@ cp .env.example .env
 
 3. Update the `.env` file with your desired PostgreSQL configuration:
 ```env
-POSTGRES_USER=your_username
-POSTGRES_PASSWORD=your_password
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
 POSTGRES_DB=locations_db
 ```
 
