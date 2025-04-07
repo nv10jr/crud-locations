@@ -1,4 +1,4 @@
-import { Entity, Column, Tree, TreeChildren, TreeParent, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, Tree, TreeChildren, TreeParent, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
@@ -29,4 +29,12 @@ export class Location {
 
   @TreeParent()
   parent: Location;
+
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @ApiProperty({ description: 'Timestamp when the location was created' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  @ApiProperty({ description: 'Timestamp when the location was last updated' })
+  updatedAt: Date;
 } 
