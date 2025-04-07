@@ -2,6 +2,8 @@
 
 A RESTful API for managing locations in a tree structure, built with NestJS, TypeORM, and PostgreSQL.
 
+![image](https://github.com/user-attachments/assets/353b1b9d-3166-4ff4-833b-c458c9dd6e95)
+
 ## Features
 
 - CRUD operations for locations
