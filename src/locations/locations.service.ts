@@ -63,6 +63,21 @@ export class LocationsService {
         throw new NotFoundException('Parent location not found');
       }
 
+      // Check if the new parent is a descendant of the current location
+      const descendants = await this.findDescendants(id);
+      if (descendants.some(descendant => descendant.id === updateLocationDto.parentId)) {
+        throw new BadRequestException('Cannot create circular reference in location hierarchy');
+      }
+
+      // Check if the new parent is an ancestor of the current location
+      const ancestors = await this.findAncestors(id);
+      if (ancestors.some(ancestor => ancestor.id === updateLocationDto.parentId)) {
+        // If the new parent is an ancestor, we need to update the hierarchy
+        // We'll directly set the new parent since TypeORM will handle the relationship update
+        location.parent = parent;
+        return this.locationRepository.save(location);
+      }
+
       location.parent = parent;
     }
 
@@ -85,5 +100,47 @@ export class LocationsService {
     }
 
     return tree;
+  }
+
+  async findDescendants(id: string): Promise<Location[]> {
+    const location = await this.findOne(id);
+    const allDescendants: Location[] = [];
+    
+    async function getDescendants(currentLocation: Location) {
+      const children = await this.locationRepository.find({
+        where: { parent: { id: currentLocation.id } },
+        relations: ['children'],
+      });
+      
+      for (const child of children) {
+        allDescendants.push(child);
+        await getDescendants(child);
+      }
+    }
+    
+    await getDescendants(location);
+    return allDescendants;
+  }
+
+  async findAncestors(id: string): Promise<Location[]> {
+    const location = await this.findOne(id);
+    const allAncestors: Location[] = [];
+    
+    async function getAncestors(currentLocation: Location) {
+      if (currentLocation.parent) {
+        const parent = await this.locationRepository.findOne({
+          where: { id: currentLocation.parent.id },
+          relations: ['parent'],
+        });
+        
+        if (parent) {
+          allAncestors.push(parent);
+          await getAncestors(parent);
+        }
+      }
+    }
+    
+    await getAncestors(location);
+    return allAncestors;
   }
 } 
